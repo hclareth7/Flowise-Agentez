@@ -111,7 +111,7 @@ class ConversationChain_Chains implements INode {
     async run(nodeData: INodeData, input: string, options: ICommonObject): Promise<string | object> {
         const memory = nodeData.inputs?.memory
 
-        const chain = prepareChain(nodeData, options, this.sessionId)
+        const chain = await prepareChain(nodeData, options, this.sessionId)
         const moderations = nodeData.inputs?.inputModeration as Moderation[]
 
         if (moderations && moderations.length > 0) {
@@ -216,14 +216,18 @@ const prepareChatPrompt = (nodeData: INodeData, humanImageMessages: MessageConte
     return chatPrompt
 }
 
+<<<<<<< HEAD
 const prepareChain = (nodeData: INodeData, options: ICommonObject, sessionId?: string) => {
+=======
+const prepareChain = async (nodeData: INodeData, options: ICommonObject, sessionId?: string) => {
+>>>>>>> adea2f08306dccd2f31b36c2f2250312f6604c0d
     let model = nodeData.inputs?.model as BaseChatModel
     const memory = nodeData.inputs?.memory as FlowiseMemory
     const memoryKey = memory.memoryKey ?? 'chat_history'
 
     let messageContent: MessageContentImageUrl[] = []
     if (llmSupportsVision(model)) {
-        messageContent = addImagesToMessages(nodeData, options, model.multiModalOption)
+        messageContent = await addImagesToMessages(nodeData, options, model.multiModalOption)
         const visionChatModel = model as IVisionChatModal
         if (messageContent?.length) {
             visionChatModel.setVisionModel()
